@@ -1,6 +1,6 @@
 {
   "name": "@matrixai/table",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Roger Qiu",
   "description": "Table data structure",
   "license": "Apache-2.0",
