@@ -45,6 +45,14 @@ describe(Table.name, () => {
     const table_ = t.getTable();
     expect(table_.get(1)).toBeUndefined();
   });
+  test('insert null and undefined values', () => {
+    const t = new Table<{ a: null; b: undefined }>(['a', 'b'], ['a', 'b']);
+    const rI = t.insertRow({ a: null, b: undefined });
+    const rIs1 = t.whereRows('a', null);
+    expect(rIs1).toContain(rI);
+    const rIs2 = t.whereRows('b', undefined);
+    expect(rIs2).toContain(rI);
+  });
   testProp(
     'insert table rows',
     [
@@ -63,7 +71,7 @@ describe(Table.name, () => {
       const t = new Table(['a', 'b', 'c', 'd'], keysIndex);
       const is = rows.map((r) => t.insertRow(r));
       expect(is).toEqual([...Array(rows.length).keys()]);
-      expect([...t]).toEqual(rows);
+      expect([...t]).toEqual([...rows.entries()]);
       expect(t.count).toBe(rows.length);
     },
   );

@@ -1,4 +1,5 @@
 import Counter from 'resource-counter';
+import * as utils from './utils';
 
 class Table<R extends Record<string, any>> {
   public readonly keys: Set<keyof R>;
@@ -104,8 +105,8 @@ class Table<R extends Record<string, any>> {
     return this.rows.size;
   }
 
-  public [Symbol.iterator](): IterableIterator<Readonly<R>> {
-    return this.rows.values();
+  public [Symbol.iterator](): IterableIterator<[number, Readonly<R>]> {
+    return this.rows.entries();
   }
 
   /**
@@ -201,10 +202,10 @@ class Table<R extends Record<string, any>> {
       }
       const index = this.indexes[k];
       if (index != null) {
-        const v_ = index.f != null ? index.f(v) : v.toString();
+        const v_ = index.f != null ? index.f(v) : utils.toString(v);
         return [...(index.index.get(v_) ?? new Set())];
       } else if (search) {
-        const v_ = v.toString();
+        const v_ = utils.toString(v);
         const rIs: Array<number> = [];
         for (const [rI, r] of this.rows.entries()) {
           if (r[k] === v_) {
@@ -223,13 +224,15 @@ class Table<R extends Record<string, any>> {
       const index = this.indexesDerived[kDerived];
       if (index != null) {
         const v_ =
-          index.f != null ? index.f(...v) : v.map((v) => v.toString()).join('');
+          index.f != null
+            ? index.f(...v)
+            : v.map((v) => utils.toString(v)).join('');
         return [...(index.index.get(v_) ?? new Set())];
       } else if (search) {
-        const v_ = v.map((v) => v.toString()).join('');
+        const v_ = v.map((v) => utils.toString(v)).join('');
         const rIs: Array<number> = [];
         for (const [rI, r] of this.rows.entries()) {
-          if (k.map((k) => r[k].toString()).join('') === v_) {
+          if (k.map((k) => utils.toString(r[k])).join('') === v_) {
             rIs.push(rI);
           }
         }
@@ -245,7 +248,7 @@ class Table<R extends Record<string, any>> {
     for (const k in r) {
       const index = this.indexes[k];
       if (index == null) continue;
-      const v = index.f != null ? index.f(r[k]) : r[k].toString();
+      const v = index.f != null ? index.f(r[k]) : utils.toString(r[k]);
       const rIs = index.index.get(v) ?? new Set();
       rIs.add(rI);
       index.index.set(v, rIs);
@@ -264,7 +267,7 @@ class Table<R extends Record<string, any>> {
         } else {
           v = index.deps
             .map((k) => r[k])
-            .map((v) => v.toString())
+            .map((v) => utils.toString(v))
             .join('');
         }
         const rIs = index.index.get(v) ?? new Set();
@@ -280,7 +283,7 @@ class Table<R extends Record<string, any>> {
     for (const k in r) {
       const index = this.indexes[k];
       if (index == null) continue;
-      const v = index.f != null ? index.f(r[k]) : r[k].toString();
+      const v = index.f != null ? index.f(r[k]) : utils.toString(r[k]);
       const rIs = index.index.get(v)!;
       rIs.delete(rI);
       if (rIs.size === 0) {
@@ -301,7 +304,7 @@ class Table<R extends Record<string, any>> {
         } else {
           v = index.deps
             .map((k) => r[k])
-            .map((v) => v.toString())
+            .map((v) => utils.toString(v))
             .join('');
         }
         const rIs = index.index.get(v)!;

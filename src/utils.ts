@@ -1,3 +1,7 @@
+function toString(v: any) {
+  return v == null ? `${v}` : v.toString();
+}
+
 /**
  * O(n) intersection
  * You can use this if you have multiple keys
@@ -12,4 +16,4 @@ function intersection<T>(...arrays: Array<Array<T>>): Array<T> {
   return [...commonSet];
 }
 
-export { intersection };
+export { toString, intersection };
