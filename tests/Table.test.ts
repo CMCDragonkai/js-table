@@ -53,6 +53,18 @@ describe(Table.name, () => {
     const rIs2 = t.whereRows('b', undefined);
     expect(rIs2).toContain(rI);
   });
+  test('clear table allows table re-use', () => {
+    const t = new Table<{ a: number; b: number }>(['a', 'b'], ['a', 'b']);
+    const rI1 = t.insertRow({ a: 1, b: 2 });
+    const rI2 = t.insertRow({ a: 3, b: 4 });
+    expect(t.getTable().size).toBe(2);
+    t.clearTable();
+    expect(t.getTable().size).toBe(0);
+    const rI1_ = t.insertRow({ a: 1, b: 2 });
+    const rI2_ = t.insertRow({ a: 3, b: 4 });
+    expect(rI1).toBe(rI1_);
+    expect(rI2).toBe(rI2_);
+  });
   testProp(
     'insert table rows',
     [

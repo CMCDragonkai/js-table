@@ -116,6 +116,20 @@ class Table<R extends Record<string, any>> {
     return new Map([...this.rows]);
   }
 
+  /**
+   * Clears the table of all rows, resets the counter, and clears all indexes.
+   */
+  public clearTable() {
+    this.rows.clear();
+    for (const k in this.indexes) {
+      this.indexes[k].index.clear();
+    }
+    for (const k in this.indexesDerived) {
+      this.indexesDerived[k].index.clear();
+    }
+    this.rowCounter = new Counter(0);
+  }
+
   public getIndex(
     k: keyof R | Array<keyof R>,
   ): ReadonlyMap<any, ReadonlySet<number>> | undefined {
