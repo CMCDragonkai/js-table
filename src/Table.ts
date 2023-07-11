@@ -119,7 +119,7 @@ class Table<R extends Record<string, any>> {
   /**
    * Clears the table of all rows, resets the counter, and clears all indexes.
    */
-  public clearTable() {
+  public clearTable(): void {
     this.rows.clear();
     for (const k in this.indexes) {
       this.indexes[k].index.clear();
