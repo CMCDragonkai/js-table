@@ -1,8 +1,5 @@
 # js-table
 
-staging:[![pipeline status](https://gitlab.com/MatrixAI/open-source/js-table/badges/staging/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/js-table/commits/staging)
-master:[![pipeline status](https://gitlab.com/MatrixAI/open-source/js-table/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/js-table/commits/master)
-
 Table data structure.
 
 ## Installation
@@ -13,7 +10,7 @@ npm install --save @matrixai/table
 
 ## Development
 
-Run `nix-shell`, and once you're inside, you can use:
+Run `nix develop`, and once you're inside, you can use:
 
 ```sh
 # install (or reinstall packages from package.json)
